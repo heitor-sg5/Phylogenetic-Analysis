@@ -5,7 +5,7 @@ import tempfile
 import math
 import os
 
-def muscle_align(sequences, muscle_path=r"C:\Tools\muscle.exe"):
+def muscle_align(sequences, muscle_path="muscle"):
     if not sequences:
         raise ValueError("The sequence list is empty.")
     
