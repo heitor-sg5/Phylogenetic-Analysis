@@ -138,12 +138,5 @@ def build_distance_matrix(seq_list, d):
 
     return dist_matrix
 
-seqs = [
-     "GCCCAGTCTATGTCAGGGGGCACGAGCATGCACA",
-    "GCCGCCGTCGTTTTCAGCAGTTATGTTCAGAT",
-    "GCCAGTCTATGTCAGGGGGCACGAGCAT",
-    "GCCCAGTGCAGGGGGCACGGAAATGCATA",
-    "CAGGCCCATGTCAGGGCACGAGCGGAGA"
-]
-
-print(build_distance_matrix(seqs, 1))
+seqs = muscle_align(seqs)
+print(build_distance_matrix(seqs, 0))
