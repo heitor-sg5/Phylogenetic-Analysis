@@ -122,8 +122,8 @@ def build_distance_matrix(seq_list, d):
     aligned_seqs = muscle_align(seq_list)
     if d == 2:
         return remove_indel_columns(aligned_seqs)
+        
     n = len(aligned_seqs)
-
     dist_matrix = [[0]*n for _ in range(n)]
 
     for i in range(n):
