@@ -142,9 +142,9 @@ def generate_nni_variants(tree):
 
     return variants
 
-def nearest_neighbour_interchange(strings):
-    alphabet = sorted(set("".join(strings)))
-    tree = generate_random_tree(strings)
+def nearest_neighbour_interchange(seqs):
+    alphabet = sorted(set("".join(seqs)))
+    tree = generate_random_tree(seqs)
     current_score = small_parsimony(tree, alphabet)
     best_tree = tree
 
@@ -168,7 +168,11 @@ def print_tree(node, indent=0):
         print("  " * (indent + 1) + f"|-- {child.name}")
         print_tree(child, indent + 2)
 
-strings = ['CCCATGTCAGGGCACGAGCGAGA', 'GCGTTTTCAGCAGTTATGTTGAT', 'GCCAGTGCAGGGGGCACGGAATA', 'GCTATGTCAGGGGGCACGAGACA', 'GCTATGTCAGGGGGCACGAGCAT']
+seqs = ['CCCATGTCAGGGCACGAGCGAGA', 
+        'GCGTTTTCAGCAGTTATGTTGAT', 
+        'GCCAGTGCAGGGGGCACGGAATA', 
+        'GCTATGTCAGGGGGCACGAGACA', 
+        'GCTATGTCAGGGGGCACGAGCAT']
 
-final_tree = nearest_neighbour_interchange(strings)
+final_tree = nearest_neighbour_interchange(seqs)
 print_tree(final_tree)
