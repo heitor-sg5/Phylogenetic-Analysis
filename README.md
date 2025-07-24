@@ -1,4 +1,4 @@
-# Phylogenetic Tree Analysis
+# Phylogenetic Tree Constructor
 
 This repository provides a range of scripts for computing evolutionary distances among sequences and reconstructing phylogenetic trees. It includes tools to build distance matrices from nucleotide sequences using multiple alignment and substitution models, and to infer trees via Unweighted Pair Group Method with Arithmetic Mean (UPGMA), Neighbor‑joining, and Nearest‑neighbour‑interchange (NNI) combined with small‑parsimony algorithms.
 
@@ -60,7 +60,7 @@ Each script will print:
   bash
 ```small_parsimony_and_nni.py```
 
-The variables D (distance matrix) and seqs (sequence list) is defined at the bottom of the tree-building scripts, and can be replaced by your own values.
+The variables D (distance matrix) and seqs (sequence list) is defined at the bottom of the tree-building scripts, and can be replaced by your own values. To select the type of distance matrix to build, change d to 0 (for Hamming's), 1 (for Kimura's), or 2 (for indel removal).
 
 ---
 
@@ -73,47 +73,78 @@ The variables D (distance matrix) and seqs (sequence list) is defined at the bot
 - Removes columns containing indels from aligned sequences, producing indel-free sequences of equal length.
 - Time complexity: O(n^2 * L)
 
-### Unichromosomal Reversal Sorting with Breakpoints
+### UPGMA Tree Constructor 
 
-- 
+- At each step, merges the two clusters with smallest average distance.
+- Creates a new internal node with age = half the merge distance.
+- Recomputes distances to the new cluster as the arithmetic mean.
 - Time complexity: O(n^3)
 
-### Multichromosomal Two-break Sorting
+### Neighbour-joining Tree Constructor
 
-- Converts genomes into breakpoint graphs using red (P) and blue (Q) edges.
-- Identifies non-trivial cycles (edges not forming isolated cycles) and applies 2-breaks that reduce the number of such cycles.
-- Updates the genome after each 2-break and repeats until P = Q, printing the transformation at each step.
-- Time complexity: O(n^2)
+- Computes a transformed distance matrix 𝐷* to correct for unequal rates using; D*{ij} = (n - 2) × D{ij} - Σ_k D_{ik} - Σ_k D_{jk}.
+- Joins the pair (i, j) minimizing D*{ij}, attaches them to a new node with calculated limb lengths.
+- Reduces matrix size and repeats until two taxa remain.
+- Time complexity: O(n^3)
+
+### NNI with Small-parsimony Tree Constructor
+
+- Small‑parsimony computes the minimum number of character changes on a tree for a given assignment of labels to leaves.
+- NNI moves swap adjacent subtrees around an internal edge to explore neighboring topologies.
+- Iteratively evaluates all single‑move variants and adopts any that reduce the parsimony score, stopping at a local optimum.
+- Time complexity: O(I * n^2)
 
 ---
 
 ## 🧪 Example Output
 
-- Identity and Signed Permutations:
+- Distance Matrix:
 
-  Genome 1: [1, 2, 3, 4, 5]
+  [[0, 295, 306, 497, 1081, 1091, 1003, 956, 954],
+  [295, 0, 309, 500, 1084, 1094, 1006, 959, 957],
+  [306, 309, 0, 489, 1073, 1083, 995, 948, 946],
+  [497, 500, 489, 0, 1092, 1102, 1014, 967, 965],
+  [1081, 1084, 1073, 1092, 0, 818, 1056, 1053, 1051],
+  [1091, 1094, 1083, 1102, 818, 0, 1066, 1063, 1061],
+  [1003, 1006, 995, 1014, 1056, 1066, 0, 975, 973],
+  [956, 959, 948, 967, 1053, 1063, 975, 0, 16],
+  [954, 957, 946, 965, 1051, 1061, 973, 16, 0]]
   
-  Genome 2: [1, -3, -2, 4, 5]
-  
-- Reversal Distance and Breakpoints:
+- Phylogenetic Tree:
 
-  Step 1: [+1 +7 -9 +11 +10 +3 -2 -6 +5 -4 -8] | Breakpoints: 11
-  
-  Step 2: [+1 +2 -3 -10 -11 +9 -7 -6 +5 -4 -8] | Breakpoints: 9
-  
-  Step 3: [+1 +2 -3 -10 -11 +9 -7 -6 -5 -4 -8] | Breakpoints: 7
-  
-  Step 4 [+1 +2 +3 -10 -11 +9 -7 -6 -5 -4 -8] | Breakpoints: 6
-  
-  Step 5: [+1 +2 +3 +4 +5 +6 +7 -9 +11 +10 -8] | Breakpoints: 5
-  
-  Step 6 [+1 +2 +3 +4 +5 +6 +7 -11 +9 +10 -8] | Breakpoints: 4
-  
-  Step 7 [+1 +2 +3 +4 +5 +6 +7 +8 -10 -9 +11] | Breakpoints: 2
-  
-  Step 8: [+1 +2 +3 +4 +5 +6 +7 +8 +9 +10 +11] | Breakpoints: 0
-  
-  Reversal distance: 7
+  16
+  |-- 13 (len=128.50)
+    13
+      |-- 4 (len=409.00)
+        4
+      |-- 5 (len=409.00)
+        5
+  |-- 15 (len=40.33)
+    15
+      |-- 6 (len=497.17)
+        6
+      |-- 14 (len=18.92)
+        14
+          |-- 9 (len=470.25)
+            9
+              |-- 7 (len=8.00)
+                7
+              |-- 8 (len=8.00)
+                8
+          |-- 12 (len=230.58)
+            12
+              |-- 3 (len=247.67)
+                3
+              |-- 11 (len=93.92)
+                11
+                  |-- 2 (len=153.75)
+                    2
+                  |-- 10 (len=6.25)
+                    10
+                      |-- 0 (len=147.50)
+                        0
+                      |-- 1 (len=147.50)
+                        1
 
 ---
 
@@ -127,6 +158,6 @@ GitHub: @heitor-sg5
 
 ## 📚 References
 
-Bioinformatics Algorithms: An Active Learning Approach (Chapter 6) by
+Bioinformatics Algorithms: An Active Learning Approach (Chapter 7) by
 Phillip Compeau & Pavel Pevzner
 https://bioinformaticsalgorithms.com
