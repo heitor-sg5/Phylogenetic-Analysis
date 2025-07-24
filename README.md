@@ -8,7 +8,7 @@ This repository provides a range of scripts for computing evolutionary distances
 
 A phylogenetic tree is a branching diagram that models the evolutionary history of a set of organisms or genes by depicting how they diverged from common ancestors based on shared genetic or phenotypic features. It conveys both the order and relative timing of speciation or duplication events, grouping taxa into clades that reflect common descent. 
 
-Because the number of possible tree topologies grows super‑exponentially with the number of taxa, computational algorithms are essential to efficiently search this vast space and identify the tree that best explains the observed sequence data under explicit evolutionary models.
+Because the number of possible tree topologies grows exponentially with the number of taxa, computational algorithms are essential to efficiently search this vast space and identify the tree that best explains the observed sequence data under explicit evolutionary models.
 
 ---
 
